@@ -113,7 +113,7 @@ public:
     }
 };
 int main() {
-    // g++ -o main shared_ptr.cpp && ./main
+    // g++ -o main shared_ptr.cpp && ./main && rm ./main
     SharedPointer<Person> sp(new Person());
     cout << sp->name << endl;
     cout << (*sp).age << endl;
