@@ -27,13 +27,13 @@ private:
     // 共享锁
     mutex* _mutex;
     // 封装引用计数器操作, 使用锁保证线程安全
-    void addCount() {
+    void add_count() {
         _mutex->lock();
         (*_count)++;
         _mutex->unlock();
     }
 
-    void deleteCount() {
+    void remove_count() {
         // 标记是否释放锁, 解锁后释放
         bool deleteMutex = false;
         _mutex->lock();
@@ -68,7 +68,7 @@ public:
         _ptr = sp._ptr;
         _count = sp._count;
         _mutex = sp._mutex;
-        addCount();
+        add_count();
     }
 
     // 运算符重载: "->", "*", "="
@@ -88,12 +88,12 @@ public:
             return *this;
         }
         // 1. 解决旧的
-        deleteCount();
+        remove_count();
         // 2. 指向新的
         _ptr = sp._ptr;
         _count = sp._count;
         _mutex = sp._mutex;
-        addCount();
+        add_count();
         return *this;
     }
 
@@ -109,7 +109,7 @@ public:
             delete _count;
             return;
         }
-        deleteCount();
+        remove_count();
     }
 };
 int main() {
